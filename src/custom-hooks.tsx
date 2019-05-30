@@ -1,0 +1,40 @@
+import { useState } from "react";
+import { ListItem } from ".";
+
+type CheckedState = {
+  checked: boolean;
+};
+
+type ListItemWithCheckedState = ListItem & CheckedState;
+
+export const useItems = (initialValue: ListItemWithCheckedState[] = []) => {
+  const [items, setItems] = useState(initialValue);
+
+  return {
+    items,
+    addItem: (item: ListItemWithCheckedState) => {
+      if (item.name !== "" && item.description !== "") {
+        setItems(
+          items.concat({
+            ...item,
+            checked: false
+          })
+        );
+      }
+    },
+    checkItem: (idx: number) => {
+      setItems(
+        items.map((item: any, index: number) => {
+          if (idx === index) {
+            item.checked = !item.checked;
+          }
+
+          return item;
+        })
+      );
+    },
+    removeItem: (idx: number) => {
+      setItems(items.filter((item: any, index: number) => idx !== index));
+    }
+  };
+};

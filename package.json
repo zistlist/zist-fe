@@ -1,0 +1,37 @@
+{
+  "name": "hooks-todo-app",
+  "version": "1.0.0",
+  "description": "Example app for this post: https://itnext.io/making-a-beautiful-todo-app-using-react-hooks-material-ui-52dacf3245f4",
+  "keywords": [
+    "react",
+    "react-hooks",
+    "hooks"
+  ],
+  "main": "src/index.tsx",
+  "dependencies": {
+    "@material-ui/core": "^4.0.1",
+    "@material-ui/icons": "^4.0.1",
+    "@types/jest": "^24.0.13",
+    "@types/node": "^12.0.3",
+    "@types/react": "^16.8.19",
+    "@types/react-dom": "^16.8.4",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "react-scripts": "^3.0.1",
+    "styled-components": "^4.2.0",
+    "typescript": "^3.5.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
+}
