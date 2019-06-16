@@ -1,5 +1,5 @@
 import React, { memo } from "react";
-import { List as ListMUI, Paper, Grid } from "@material-ui/core";
+import { List as ListMUI, Paper } from "@material-ui/core";
 
 import ListItem from "./ListItem";
 

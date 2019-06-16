@@ -13,7 +13,7 @@ export const useItems = (initialValue: ListItemWithCheckedState[] = []) => {
   return {
     items,
     addItem: (item: ListItemWithCheckedState) => {
-      if (item.name !== "" && item.description !== "") {
+      if (item.category !== "" && item.quantity !== null) {
         setItems(
           items.concat({
             ...item,

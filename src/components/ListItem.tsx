@@ -1,7 +1,6 @@
 import React, { memo } from "react";
 
 import {
-  List,
   ListItem as ListItemMUI,
   Checkbox,
   IconButton,
