@@ -69,7 +69,7 @@ const AddItem = memo((props: any) => {
 
   const loadAmazonInfoAndClearUrlInput = () => {
     setUrlLoaded(true);
-    setValues({ ...values, url: "" });
+    setValues({ ...values, ...SAMPLE_AMAZON_SCRAPED_ITEMS, url: "" });
   };
 
   const onInputKeyPress = (e: React.KeyboardEvent) =>
@@ -86,6 +86,7 @@ const AddItem = memo((props: any) => {
   const clearInputAndAddItem = () => {
     props.addItem(values);
     setValues(initialState);
+    setUrlLoaded(false);
   };
 
   return (
