@@ -143,6 +143,7 @@ const App = () => {
               if (item.category !== "" && item.quantity !== null) {
                 if (!items.length) {
                   const addDoc = await lists.add({
+                    title: listTitle,
                     listItems: [item]
                   });
 
