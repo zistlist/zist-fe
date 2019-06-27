@@ -1,5 +1,7 @@
 import "./styles.css";
 
+import * as firebase from "firebase";
+
 import React from "react";
 import ReactDOM from "react-dom";
 
@@ -82,8 +84,48 @@ const EditableListTitle = () => {
   );
 };
 
+const config = {
+  apiKey: "AIzaSyAlKD1sebSl5mvT0HgFu2Nsy1GNPRDjCho",
+  authDomain: "zist-90c81.firebaseapp.com",
+  databaseURL: "https://zist-90c81.firebaseio.com",
+  projectId: "zist-90c81",
+  storageBucket: "zist-90c81.appspot.com",
+  messagingSenderId: "65347563740",
+  appId: "1:65347563740:web:cfeb4d4deea7e7c4"
+};
+firebase.initializeApp(config);
+const lists = firebase.firestore().collection("lists");
+console.log("lists", lists);
+lists.get().then(querySnapshot =>
+  querySnapshot.forEach(doc => {
+    console.log("doc.id", doc.id);
+    console.log("doc.data()", doc.data());
+  })
+);
+
+// export const todosRef = databaseRef.child("todos");
+
 const App = () => {
-  const { items, addItem, checkItem, removeItem } = useItems();
+  const { items, addItem, checkItem, removeItem, setItems } = useItems();
+  const listId = React.useRef("");
+
+  React.useEffect(() => {
+    const paths = window.location.pathname.split("/");
+    if (paths[1] === "lists") {
+      lists
+        .doc(paths[2])
+        .get()
+        .then(doc => {
+          if (doc.exists) {
+            listId.current = paths[2];
+            const data = doc.data();
+            if (data) {
+              setItems(data.listItems);
+            }
+          }
+        });
+    }
+  }, [setItems]);
 
   return (
     <StylesProvider injectFirst>
@@ -92,7 +134,31 @@ const App = () => {
         <AddItem addItem={addItem} />
         <ItemList
           items={items}
-          onItemCheck={(idx: number) => checkItem(idx)}
+          onItemCheck={async (idx: number, amazonId: string) => {
+            // const currentListItems = (await lists
+            //   .doc(listId.current)
+            //   .get()).data().listItems
+
+            const data = (await lists.doc(listId.current).get()).data();
+
+            if (data) {
+              const currentListItems = data.listItems;
+
+              await lists.doc(listId.current).set({
+                listItems: currentListItems.map((currentListItem: any) => {
+                  if (currentListItem.amazonId === amazonId) {
+                    return {
+                      ...currentListItem,
+                      checked: !currentListItem.checked
+                    };
+                  }
+                  return currentListItem;
+                })
+              });
+            }
+
+            checkItem(idx);
+          }}
           onItemRemove={(idx: number) => removeItem(idx)}
         />
       </Layout>

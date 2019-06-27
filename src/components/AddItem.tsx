@@ -4,6 +4,7 @@ import "styled-components/macro";
 
 import {
   Button,
+  CircularProgress,
   FormControl,
   Grid,
   InputLabel,
@@ -52,24 +53,47 @@ const initialState: ListItem = {
   url: ""
 };
 
-const ScrapedAmazonItems = () => (
-  <>
-    <img src={SAMPLE_AMAZON_SCRAPED_ITEMS.imageUrl} alt="amazon-item" />
-    <Typography variant="h5">{SAMPLE_AMAZON_SCRAPED_ITEMS.name}</Typography>
-    <Typography variant="body2">
-      {SAMPLE_AMAZON_SCRAPED_ITEMS.description}
-    </Typography>
-    <Typography>$ {SAMPLE_AMAZON_SCRAPED_ITEMS.price}</Typography>
-  </>
-);
+const getAmazonInfo = async (productUrl: string) => {
+  const res = await fetch(
+    "https://us-central1-myproject-dbb0e.cloudfunctions.net/scraper",
+    {
+      method: "POST",
+      body: JSON.stringify({ data: productUrl }),
+      headers: {
+        "Content-Type": "application/json"
+      }
+    }
+  );
+  console.log("res", res);
+  if (!res.ok) throw new Error(res as any);
+  return res.json();
+};
+
+const ScrapedAmazonItems = ({
+  values: { imageUrl, name, description, price }
+}: any) => {
+  return (
+    <>
+      <img src={imageUrl} alt="amazon-item" />
+      <Typography variant="h5">{name}</Typography>
+      <Typography variant="body2">{description}</Typography>
+      <Typography>$ {price}</Typography>
+    </>
+  );
+};
 
 const AddItem = memo((props: any) => {
   const [values, setValues] = React.useState<ListItem>(initialState);
   const [urlLoaded, setUrlLoaded] = React.useState(false);
+  const [loading, setLoading] = React.useState(false);
 
-  const loadAmazonInfoAndClearUrlInput = () => {
+  const loadAmazonInfoAndClearUrlInput = async () => {
+    setLoading(true);
+    const scrapedAmazonInfo = await getAmazonInfo(values.url);
+    console.log("scrapedAmazonInfo", scrapedAmazonInfo);
+    setValues({ ...values, ...scrapedAmazonInfo, url: "" });
+    setLoading(false);
     setUrlLoaded(true);
-    setValues({ ...values, ...SAMPLE_AMAZON_SCRAPED_ITEMS, url: "" });
   };
 
   const onInputKeyPress = (e: React.KeyboardEvent) =>
@@ -94,15 +118,23 @@ const AddItem = memo((props: any) => {
       <Grid container alignItems="flex-end">
         <Grid xs={10} md={11} item style={{ paddingRight: 16 }}>
           {!urlLoaded ? (
-            <TextField
-              placeholder="URL"
-              value={values.url}
-              onChange={handleChange("url")}
-              onKeyDown={onInputKeyPress}
-              fullWidth
-            />
+            loading ? (
+              <CircularProgress
+                css={`
+                  display: block;
+                `}
+              />
+            ) : (
+              <TextField
+                placeholder="URL"
+                value={values.url}
+                onChange={handleChange("url")}
+                onKeyDown={onInputKeyPress}
+                fullWidth
+              />
+            )
           ) : (
-            <ScrapedAmazonItems />
+            <ScrapedAmazonItems values={values} />
           )}
           <FormControl>
             <InputLabel htmlFor="category">Category</InputLabel>

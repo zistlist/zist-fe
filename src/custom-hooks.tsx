@@ -12,6 +12,7 @@ export const useItems = (initialValue: ListItemWithCheckedState[] = []) => {
 
   return {
     items,
+    setItems,
     addItem: (item: ListItemWithCheckedState) => {
       if (item.category !== "" && item.quantity !== null) {
         setItems(

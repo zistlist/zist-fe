@@ -14,7 +14,7 @@ const List = memo((props: any) => (
               key={`Item.${idx}`}
               divider={idx !== props.items.length - 1}
               onButtonClick={() => props.onItemRemove(idx)}
-              onCheckBoxToggle={() => props.onItemCheck(idx)}
+              onCheckBoxToggle={() => props.onItemCheck(idx, item.amazonId)}
             />
           ))}
         </ListMUI>

@@ -5,9 +5,11 @@ import "styled-components/macro";
 import capitalize from "lodash/capitalize";
 
 import {
-  ListItem as ListItemMUI,
+  Card,
+  CardMedia,
   Checkbox,
   IconButton,
+  ListItem as ListItemMUI,
   ListItemText,
   ListItemSecondaryAction,
   Typography
@@ -23,7 +25,25 @@ const ListItem = (props: any) => {
         checked={props.checked}
         disableRipple
       />
-      <img src={props.imageUrl} alt="amazon-item" />
+      <Card
+        css={`
+          min-width: 200px;
+          width: 200px;
+          height: 150px;
+
+          margin: 0 20px;
+        `}
+      >
+        <CardMedia
+          css={`
+            width: 100%;
+            height: 100%;
+            background-size: contain;
+          `}
+          image={props.imageUrl}
+          title="amazon-item"
+        />
+      </Card>
       <ListItemText
         primary={<Typography>{props.name}</Typography>}
         secondary={
@@ -42,6 +62,13 @@ const ListItem = (props: any) => {
               `}
             >
               Quantity: {props.quantity}
+            </Typography>
+            <Typography
+              css={`
+                color: black;
+              `}
+            >
+              Price: {props.price}
             </Typography>
             <Typography variant="caption">Comment: {props.comment}</Typography>
           </>
