@@ -14,14 +14,12 @@ export const useItems = (initialValue: ListItemWithCheckedState[] = []) => {
     items,
     setItems,
     addItem: (item: ListItemWithCheckedState) => {
-      if (item.category !== "" && item.quantity !== null) {
-        setItems(
-          items.concat({
-            ...item,
-            checked: false
-          })
-        );
-      }
+      setItems(
+        items.concat({
+          ...item,
+          checked: false
+        })
+      );
     },
     checkItem: (idx: number) => {
       setItems(
@@ -35,6 +33,8 @@ export const useItems = (initialValue: ListItemWithCheckedState[] = []) => {
       );
     },
     removeItem: (idx: number) => {
+      // remove item from list in firestore
+
       setItems(items.filter((item: any, index: number) => idx !== index));
     }
   };

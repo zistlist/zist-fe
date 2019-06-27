@@ -50,7 +50,8 @@ const initialState: ListItem = {
   comment: "",
   category: "",
   quantity: 1,
-  url: ""
+  url: "",
+  id: ""
 };
 
 const getAmazonInfo = async (productUrl: string) => {
@@ -64,7 +65,6 @@ const getAmazonInfo = async (productUrl: string) => {
       }
     }
   );
-  console.log("res", res);
   if (!res.ok) throw new Error(res as any);
   return res.json();
 };
@@ -90,7 +90,6 @@ const AddItem = memo((props: any) => {
   const loadAmazonInfoAndClearUrlInput = async () => {
     setLoading(true);
     const scrapedAmazonInfo = await getAmazonInfo(values.url);
-    console.log("scrapedAmazonInfo", scrapedAmazonInfo);
     setValues({ ...values, ...scrapedAmazonInfo, url: "" });
     setLoading(false);
     setUrlLoaded(true);

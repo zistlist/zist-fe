@@ -38,6 +38,7 @@ export type ListItem = {
   comment: string;
   category: string;
   quantity: number;
+  id: string;
   url: string;
 };
 
@@ -57,11 +58,10 @@ const keyInput = (
   return false;
 };
 
-const EditableListTitle = () => {
+const EditableListTitle = ({ listTitle, setListTitle }: any) => {
   const [viewState, setViewState] = React.useState<"viewing" | "editing">(
     "viewing"
   );
-  const [listTitle, setListTitle] = React.useState("title");
 
   const clearInputAndUpdateTitle = (e: React.KeyboardEvent) => {
     setListTitle((e.target as HTMLInputElement).value);
@@ -95,18 +95,13 @@ const config = {
 };
 firebase.initializeApp(config);
 const lists = firebase.firestore().collection("lists");
-console.log("lists", lists);
-lists.get().then(querySnapshot =>
-  querySnapshot.forEach(doc => {
-    console.log("doc.id", doc.id);
-    console.log("doc.data()", doc.data());
-  })
-);
-
-// export const todosRef = databaseRef.child("todos");
+lists.get().then(querySnapshot => querySnapshot.forEach(doc => {}));
 
 const App = () => {
   const { items, addItem, checkItem, removeItem, setItems } = useItems();
+
+  const [listTitle, setListTitle] = React.useState("title");
+
   const listId = React.useRef("");
 
   React.useEffect(() => {
@@ -121,6 +116,7 @@ const App = () => {
             const data = doc.data();
             if (data) {
               setItems(data.listItems);
+              setListTitle(data.title);
             }
           }
         });
@@ -130,21 +126,49 @@ const App = () => {
   return (
     <StylesProvider injectFirst>
       <Layout>
-        <EditableListTitle />
-        <AddItem addItem={addItem} />
+        <EditableListTitle
+          listTitle={listTitle}
+          setListTitle={(title: string) => {
+            if (listId.current) {
+              lists.doc(listId.current).update({
+                title
+              });
+            }
+            setListTitle(title);
+          }}
+        />
+        <AddItem
+          addItem={async (item: any) => {
+            if (!items.find(el => el.id === item.id)) {
+              if (item.category !== "" && item.quantity !== null) {
+                if (!items.length) {
+                  const addDoc = await lists.add({
+                    listItems: [item]
+                  });
+
+                  window.history.pushState(null, "", `/lists/${addDoc.id}`);
+                  listId.current = addDoc.id;
+                } else {
+                  {
+                    await lists.doc(listId.current).update({
+                      listItems: [...items, item]
+                    });
+                  }
+                }
+                addItem(item);
+              }
+            }
+          }}
+        />
         <ItemList
           items={items}
           onItemCheck={async (idx: number, amazonId: string) => {
-            // const currentListItems = (await lists
-            //   .doc(listId.current)
-            //   .get()).data().listItems
-
             const data = (await lists.doc(listId.current).get()).data();
 
             if (data) {
               const currentListItems = data.listItems;
 
-              await lists.doc(listId.current).set({
+              await lists.doc(listId.current).update({
                 listItems: currentListItems.map((currentListItem: any) => {
                   if (currentListItem.amazonId === amazonId) {
                     return {
@@ -159,7 +183,12 @@ const App = () => {
 
             checkItem(idx);
           }}
-          onItemRemove={(idx: number) => removeItem(idx)}
+          onItemRemove={async (idx: number, items: Array<ListItem>) => {
+            await lists.doc(listId.current).update({
+              listItems: items.filter((_, filterIndex) => idx !== filterIndex)
+            });
+            removeItem(idx);
+          }}
         />
       </Layout>
     </StylesProvider>
