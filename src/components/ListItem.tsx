@@ -21,6 +21,7 @@ const ListItem = (props: any) => {
   return (
     <ListItemMUI divider={props.divider}>
       <Checkbox
+        disabled={props.isViewOnly}
         onClick={props.onCheckBoxToggle}
         checked={props.checked}
         disableRipple
@@ -75,7 +76,7 @@ const ListItem = (props: any) => {
         }
       />
       <ListItemSecondaryAction>
-        <IconButton aria-label="Delete Item" onClick={props.onButtonClick}>
+        <IconButton disabled={props.isViewOnly} aria-label="Delete Item" onClick={props.onButtonClick}>
           <DeleteOutlined />
         </IconButton>
       </ListItemSecondaryAction>

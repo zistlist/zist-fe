@@ -36,6 +36,6 @@ export const useItems = (initialValue: ListItemWithCheckedState[] = []) => {
       // remove item from list in firestore
 
       setItems(items.filter((item: any, index: number) => idx !== index));
-    }
+    },
   };
 };

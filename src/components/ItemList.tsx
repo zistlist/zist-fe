@@ -10,6 +10,7 @@ const List = memo((props: any) => (
         <ListMUI style={{ overflow: "scroll" }}>
           {props.items.map((item: any, idx: number) => (
             <ListItem
+              isViewOnly={props.isViewOnly}
               {...item}
               key={`Item.${idx}`}
               divider={idx !== props.items.length - 1}

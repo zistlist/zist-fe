@@ -33,6 +33,9 @@ const ListTitleEditing: any = styled(TextField)`
   }
 `;
 
+
+
+
 export type ListItem = {
   name: string;
   comment: string;
@@ -58,7 +61,7 @@ const keyInput = (
   return false;
 };
 
-const EditableListTitle = ({ listTitle, setListTitle }: any) => {
+const EditableListTitle = ({ listTitle, setListTitle, isViewOnly }: any) => {
   const [viewState, setViewState] = React.useState<"viewing" | "editing">(
     "viewing"
   );
@@ -71,7 +74,8 @@ const EditableListTitle = ({ listTitle, setListTitle }: any) => {
   const onInputKeyPress = (e: React.KeyboardEvent) =>
     keyInput(e, clearInputAndUpdateTitle, () => setViewState("viewing"));
 
-  return viewState === "viewing" ? (
+  if (isViewOnly === false) {
+    return viewState === "viewing" ? (
     <ListTitle variant="h3" onClick={() => setViewState("editing")}>
       {listTitle}
     </ListTitle>
@@ -82,6 +86,13 @@ const EditableListTitle = ({ listTitle, setListTitle }: any) => {
       onKeyDown={onInputKeyPress}
     />
   );
+} else {
+    return (
+      <ListTitle variant="h3">
+        {listTitle}
+      </ListTitle>
+    );
+  }
 };
 
 const config = {
@@ -104,6 +115,8 @@ const App = () => {
 
   const listId = React.useRef("");
 
+  const [isViewOnly, setViewOnly] = React.useState(true);
+
   React.useEffect(() => {
     const paths = window.location.pathname.split("/");
     if (paths[1] === "lists") {
@@ -125,6 +138,7 @@ const App = () => {
 
   return (
     <StylesProvider injectFirst>
+      <button onClick={() => {setViewOnly(!isViewOnly); console.log(isViewOnly)}}>mockViewer</button>
       <Layout>
         <EditableListTitle
           listTitle={listTitle}
@@ -134,10 +148,13 @@ const App = () => {
                 title
               });
             }
-            setListTitle(title);
+            if (isViewOnly === false) {
+              setListTitle(title);
+            }
           }}
         />
         <AddItem
+          isViewOnly={isViewOnly}
           addItem={async (item: any) => {
             if (!items.find(el => el.id === item.id)) {
               if (item.category !== "" && item.quantity !== null) {
@@ -162,6 +179,7 @@ const App = () => {
           }}
         />
         <ItemList
+          isViewOnly={isViewOnly}
           items={items}
           onItemCheck={async (idx: number, amazonId: string) => {
             const data = (await lists.doc(listId.current).get()).data();
@@ -195,6 +213,7 @@ const App = () => {
     </StylesProvider>
   );
 };
+
 
 const rootElement = document.getElementById("root");
 ReactDOM.render(<App />, rootElement);
