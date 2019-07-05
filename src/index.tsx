@@ -141,6 +141,7 @@ const App = () => {
       <button onClick={() => {setViewOnly(!isViewOnly); console.log(isViewOnly)}}>mockViewer</button>
       <Layout>
         <EditableListTitle
+          isViewOnly={isViewOnly}
           listTitle={listTitle}
           setListTitle={(title: string) => {
             if (listId.current) {
