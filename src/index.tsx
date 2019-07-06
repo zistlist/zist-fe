@@ -16,6 +16,7 @@ import Layout from "./components/Layout";
 
 import AddItem from "./components/AddItem";
 import ItemList from "./components/ItemList";
+import App from './components/App';
 
 const KEYCODE_ENTER = 13;
 const KEYCODE_ESC = 27;
