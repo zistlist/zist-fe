@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ListItem } from ".";
+import { ListItem } from "./utils/types";
 
 type CheckedState = {
   checked: boolean;

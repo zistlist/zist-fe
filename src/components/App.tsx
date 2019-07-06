@@ -17,14 +17,7 @@ import ItemList from "./ItemList";
 import { lists } from '../utils/firebaseQuery';
 import { EditableListTitle } from '../utils/utils';
 
-export type ListItem = {
-  name: string;
-  comment: string;
-  category: string;
-  quantity: number;
-  id: string;
-  url: string;
-};
+import { ListItem } from '../utils/types';
 
 const list = lists();
 list.get().then(querySnapshot => querySnapshot.forEach(doc => {}));
