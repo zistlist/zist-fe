@@ -26,8 +26,8 @@ export type ListItem = {
   url: string;
 };
 
-lists();
-lists.get().then(querySnapshot => querySnapshot.forEach(doc => {}));
+const list = lists();
+list.get().then(querySnapshot => querySnapshot.forEach(doc => {}));
 
 const App = () => {
   const { items, addItem, checkItem, removeItem, setItems } = useItems();
@@ -41,7 +41,7 @@ const App = () => {
   React.useEffect(() => {
     const paths = window.location.pathname.split("/");
     if (paths[1] === "lists") {
-      lists
+      list
         .doc(paths[2])
         .get()
         .then(doc => {
@@ -66,7 +66,7 @@ const App = () => {
           listTitle={listTitle}
           setListTitle={(title: string) => {
             if (listId.current) {
-              lists.doc(listId.current).update({
+              list.doc(listId.current).update({
                 title
               });
             }
@@ -81,7 +81,7 @@ const App = () => {
             if (!items.find(el => el.id === item.id)) {
               if (item.category !== "" && item.quantity !== null) {
                 if (!items.length) {
-                  const addDoc = await lists.add({
+                  const addDoc = await list.add({
                     title: listTitle,
                     listItems: [item]
                   });
@@ -90,7 +90,7 @@ const App = () => {
                   listId.current = addDoc.id;
                 } else {
                   {
-                    await lists.doc(listId.current).update({
+                    await list.doc(listId.current).update({
                       listItems: [...items, item]
                     });
                   }
@@ -104,12 +104,12 @@ const App = () => {
           isViewOnly={isViewOnly}
           items={items}
           onItemCheck={async (idx: number, amazonId: string) => {
-            const data = (await lists.doc(listId.current).get()).data();
+            const data = (await list.doc(listId.current).get()).data();
 
             if (data) {
               const currentListItems = data.listItems;
 
-              await lists.doc(listId.current).update({
+              await list.doc(listId.current).update({
                 listItems: currentListItems.map((currentListItem: any) => {
                   if (currentListItem.amazonId === amazonId) {
                     return {
@@ -125,7 +125,7 @@ const App = () => {
             checkItem(idx);
           }}
           onItemRemove={async (idx: number, items: Array<ListItem>) => {
-            await lists.doc(listId.current).update({
+            await list.doc(listId.current).update({
               listItems: items.filter((_, filterIndex) => idx !== filterIndex)
             });
             removeItem(idx);
