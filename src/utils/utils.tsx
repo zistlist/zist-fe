@@ -18,7 +18,7 @@ const ListTitleEditing: any = styled(TextField)`
 const KEYCODE_ENTER = 13;
 const KEYCODE_ESC = 27;
 
-const keyInput = (
+export const keyInput = (
   e: React.KeyboardEvent,
   saveCallback: any,
   cancelCallback: any

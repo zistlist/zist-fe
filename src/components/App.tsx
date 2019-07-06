@@ -16,7 +16,6 @@ import ItemList from "./ItemList";
 
 import { lists } from '../utils/firebaseQuery';
 import { EditableListTitle } from '../utils/utils';
-
 import { ListItem } from '../utils/types';
 
 const list = lists();

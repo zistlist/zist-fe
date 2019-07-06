@@ -16,25 +16,7 @@ import {
 } from "@material-ui/core";
 
 import { ListItem } from '../utils/types';
-
-const KEYCODE_ENTER = 13;
-const KEYCODE_ESC = 27;
-
-const keyInput = (
-  e: React.KeyboardEvent,
-  saveCallback: any,
-  cancelCallback: any
-) => {
-  if (e.which === KEYCODE_ENTER || e.keyCode === KEYCODE_ENTER) {
-    saveCallback(e);
-    return true;
-  } else if (e.which === KEYCODE_ESC || e.keyCode === KEYCODE_ESC) {
-    cancelCallback(e);
-    return true;
-  }
-
-  return false;
-};
+import { keyInput } from '../utils/utils';
 
 const SAMPLE_AMAZON_SCRAPED_ITEMS = {
   imageUrl:
