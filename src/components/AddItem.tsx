@@ -113,7 +113,7 @@ const AddItem = memo((props: any) => {
   };
 
   return (
-    <Paper style={{ margin: 16, padding: 16 }}>
+    <Paper style={props.isViewOnly ? { margin: 16, padding: 16, display: 'none' } : { margin: 16, padding: 16 }}>
       <Grid container alignItems="flex-end">
         <Grid xs={10} md={11} item style={{ paddingRight: 16 }}>
           {!urlLoaded ? (
