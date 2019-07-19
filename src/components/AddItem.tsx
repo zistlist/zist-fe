@@ -17,6 +17,7 @@ import {
 
 import { ListItem } from "..";
 
+
 const KEYCODE_ENTER = 13;
 const KEYCODE_ESC = 27;
 
@@ -82,6 +83,8 @@ const ScrapedAmazonItems = ({
   );
 };
 
+
+
 const AddItem = memo((props: any) => {
   const [values, setValues] = React.useState<ListItem>(initialState);
   const [urlLoaded, setUrlLoaded] = React.useState(false);
@@ -99,6 +102,10 @@ const AddItem = memo((props: any) => {
     keyInput(e, loadAmazonInfoAndClearUrlInput, () =>
       setValues({ ...values, url: "" })
     );
+
+    const onButtonClick = () => {
+      loadAmazonInfoAndClearUrlInput();
+    }
 
   const handleChange = (name: keyof ListItem) => (
     event: React.ChangeEvent<HTMLInputElement>
@@ -124,17 +131,28 @@ const AddItem = memo((props: any) => {
                 `}
               />
             ) : (
-              <TextField
+              [<TextField
                 placeholder="URL"
                 value={values.url}
                 onChange={handleChange("url")}
                 onKeyDown={onInputKeyPress}
                 fullWidth
-              />
+              />,
+              <Button
+                style={{ position:"absolute", marginLeft: 15}}
+                  color="secondary"
+                  variant="outlined"
+                  onClick={loadAmazonInfoAndClearUrlInput}
+
+                >
+                  AddItem
+                </Button>
+            ]
             )
           ) : (
             <ScrapedAmazonItems values={values} />
           )}
+    
           <FormControl>
             <InputLabel htmlFor="category">Category</InputLabel>
             <Select
@@ -181,7 +199,7 @@ const AddItem = memo((props: any) => {
             onClick={clearInputAndAddItem}
             disabled={!urlLoaded}
           >
-            Add
+            AddToList
           </Button>
         </Grid>
       </Grid>
