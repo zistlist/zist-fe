@@ -6,8 +6,8 @@ import ListItem from "./ListItem";
 const List = memo((props: any) => (
   <>
     {props.items.length > 0 && (
-      <Paper style={{ margin: 16 }}>
-        <ListMUI style={{ overflow: "scroll" }}>
+      <Paper css={` margin: 16 `}>
+        <ListMUI css={` overflow: scroll `}>
           {props.items.map((item: any, idx: number) => (
             <ListItem
               isViewOnly={props.isViewOnly}

@@ -17,6 +17,7 @@ import {
 
 import { ListItem } from "..";
 
+
 const KEYCODE_ENTER = 13;
 const KEYCODE_ESC = 27;
 
@@ -82,6 +83,8 @@ const ScrapedAmazonItems = ({
   );
 };
 
+
+
 const AddItem = memo((props: any) => {
   const [values, setValues] = React.useState<ListItem>(initialState);
   const [urlLoaded, setUrlLoaded] = React.useState(false);
@@ -100,6 +103,10 @@ const AddItem = memo((props: any) => {
       setValues({ ...values, url: "" })
     );
 
+    const onButtonClick = () => {
+      loadAmazonInfoAndClearUrlInput();
+    }
+
   const handleChange = (name: keyof ListItem) => (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -113,7 +120,7 @@ const AddItem = memo((props: any) => {
   };
 
   return (
-    <Paper style={props.isViewOnly ? { margin: 16, padding: 16, display: 'none' } : { margin: 16, padding: 16 }}>
+    <Paper css={props.isViewOnly ?  `margin: 16; padding: 16; display: none`  :  `margin: 16, padding: 16 `}>
       <Grid container alignItems="flex-end">
         <Grid xs={10} md={11} item style={{ paddingRight: 16 }}>
           {!urlLoaded ? (
@@ -124,6 +131,7 @@ const AddItem = memo((props: any) => {
                 `}
               />
             ) : (
+            <>
               <TextField
                 placeholder="URL"
                 value={values.url}
@@ -131,10 +139,25 @@ const AddItem = memo((props: any) => {
                 onKeyDown={onInputKeyPress}
                 fullWidth
               />
+              <Button
+                  css={`
+                      position: absolute;
+                      margin-left: 15px;
+                      width: 7rem;
+                      `}
+                  color="secondary"
+                  variant="outlined"
+                  onClick={loadAmazonInfoAndClearUrlInput}
+
+                >
+                  Add Item
+                </Button>
+            </>
             )
           ) : (
             <ScrapedAmazonItems values={values} />
           )}
+
           <FormControl>
             <InputLabel htmlFor="category">Category</InputLabel>
             <Select
@@ -180,8 +203,12 @@ const AddItem = memo((props: any) => {
             variant="outlined"
             onClick={clearInputAndAddItem}
             disabled={!urlLoaded}
+            css={`
+              width: 7rem;
+              `
+            }
           >
-            Add
+            Add To List
           </Button>
         </Grid>
       </Grid>
