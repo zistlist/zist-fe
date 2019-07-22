@@ -120,7 +120,7 @@ const AddItem = memo((props: any) => {
   };
 
   return (
-    <Paper style={props.isViewOnly ? { margin: 16, padding: 16, display: 'none' } : { margin: 16, padding: 16 }}>
+    <Paper css={props.isViewOnly ?  `margin: 16; padding: 16; display: none`  :  `margin: 16, padding: 16 `}>
       <Grid container alignItems="flex-end">
         <Grid xs={10} md={11} item style={{ paddingRight: 16 }}>
           {!urlLoaded ? (
@@ -131,7 +131,8 @@ const AddItem = memo((props: any) => {
                 `}
               />
             ) : (
-              [<TextField
+            <>
+              <TextField
                 placeholder="URL"
                 value={values.url}
                 onChange={handleChange("url")}
@@ -139,20 +140,23 @@ const AddItem = memo((props: any) => {
                 fullWidth
               />,
               <Button
-                style={{ position:"absolute", marginLeft: 15}}
+                  css={`
+                      position: absolute;
+                      marginLeft: 15
+                      `}
                   color="secondary"
                   variant="outlined"
                   onClick={loadAmazonInfoAndClearUrlInput}
 
                 >
-                  AddItem
+                  Add Item
                 </Button>
-            ]
+            </>
             )
           ) : (
             <ScrapedAmazonItems values={values} />
           )}
-    
+
           <FormControl>
             <InputLabel htmlFor="category">Category</InputLabel>
             <Select
@@ -199,7 +203,7 @@ const AddItem = memo((props: any) => {
             onClick={clearInputAndAddItem}
             disabled={!urlLoaded}
           >
-            AddToList
+            Add To List
           </Button>
         </Grid>
       </Grid>
