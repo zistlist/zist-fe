@@ -15,8 +15,6 @@ import {
   Typography
 } from "@material-ui/core";
 
-import { ListItem } from "..";
-
 const KEYCODE_ENTER = 13;
 const KEYCODE_ESC = 27;
 

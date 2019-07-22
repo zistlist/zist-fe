@@ -33,15 +33,6 @@ const ListTitleEditing: any = styled(TextField)`
   }
 `;
 
-export type ListItem = {
-  name: string;
-  comment: string;
-  category: string;
-  quantity: number;
-  id: string;
-  url: string;
-};
-
 const keyInput = (
   e: React.KeyboardEvent,
   saveCallback: any,

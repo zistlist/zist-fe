@@ -1,11 +1,4 @@
 import { useState } from "react";
-import { ListItem } from ".";
-
-type CheckedState = {
-  checked: boolean;
-};
-
-type ListItemWithCheckedState = ListItem & CheckedState;
 
 export const useItems = (initialValue: ListItemWithCheckedState[] = []) => {
   const [items, setItems] = useState(initialValue);
@@ -36,6 +29,6 @@ export const useItems = (initialValue: ListItemWithCheckedState[] = []) => {
       // remove item from list in firestore
 
       setItems(items.filter((item: any, index: number) => idx !== index));
-    },
+    }
   };
 };
