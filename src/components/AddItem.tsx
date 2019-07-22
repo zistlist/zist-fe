@@ -138,11 +138,12 @@ const AddItem = memo((props: any) => {
                 onChange={handleChange("url")}
                 onKeyDown={onInputKeyPress}
                 fullWidth
-              />,
+              />
               <Button
                   css={`
                       position: absolute;
-                      marginLeft: 15
+                      margin-left: 15px;
+                      width: 7rem;
                       `}
                   color="secondary"
                   variant="outlined"
@@ -202,6 +203,10 @@ const AddItem = memo((props: any) => {
             variant="outlined"
             onClick={clearInputAndAddItem}
             disabled={!urlLoaded}
+            css={`
+              width: 7rem;
+              `
+            }
           >
             Add To List
           </Button>
