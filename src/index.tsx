@@ -33,18 +33,6 @@ const ListTitleEditing: any = styled(TextField)`
   }
 `;
 
-
-
-
-export type ListItem = {
-  name: string;
-  comment: string;
-  category: string;
-  quantity: number;
-  id: string;
-  url: string;
-};
-
 const keyInput = (
   e: React.KeyboardEvent,
   saveCallback: any,
@@ -76,22 +64,18 @@ const EditableListTitle = ({ listTitle, setListTitle, isViewOnly }: any) => {
 
   if (isViewOnly === false) {
     return viewState === "viewing" ? (
-    <ListTitle variant="h3" onClick={() => setViewState("editing")}>
-      {listTitle}
-    </ListTitle>
-  ) : (
-    <ListTitleEditing
-      placeholder="Name"
-      defaultValue={listTitle}
-      onKeyDown={onInputKeyPress}
-    />
-  );
-} else {
-    return (
-      <ListTitle variant="h3">
+      <ListTitle variant="h3" onClick={() => setViewState("editing")}>
         {listTitle}
       </ListTitle>
+    ) : (
+      <ListTitleEditing
+        placeholder="Name"
+        defaultValue={listTitle}
+        onKeyDown={onInputKeyPress}
+      />
     );
+  } else {
+    return <ListTitle variant="h3">{listTitle}</ListTitle>;
   }
 };
 
@@ -108,6 +92,8 @@ firebase.initializeApp(config);
 const lists = firebase.firestore().collection("lists");
 lists.get().then(querySnapshot => querySnapshot.forEach(doc => {}));
 
+const provider = new firebase.auth.GoogleAuthProvider();
+
 const App = () => {
   const { items, addItem, checkItem, removeItem, setItems } = useItems();
 
@@ -115,7 +101,60 @@ const App = () => {
 
   const listId = React.useRef("");
 
-  const [isViewOnly, setViewOnly] = React.useState(true);
+  const [user, setUser] = React.useState();
+
+  const [listOwner, setListOwner] = React.useState();
+
+  const isViewOnly = !user || user.uid !== listOwner;
+
+  const signIn = () => {
+    firebase
+      .auth()
+      .signInWithPopup(provider)
+      .then(function(result: any) {
+        // This gives you a Google Access Token. You can use it to access the Google API.
+        // const token = result.credential.accessToken;
+
+        // The signed-in user info.
+        const user = result.user;
+
+        setUser(user);
+      })
+      .catch(function(error: any) {
+        // Handle Errors here.
+        // const errorCode = error.code;
+        // const errorMessage = error.message;
+        // The email of the user's account used.
+        // const email = error.email;
+        // The firebase.auth.AuthCredential type that was used.
+        // const credential = error.credential;
+        // ...
+      });
+  };
+
+  const signOut = () => {
+    firebase
+      .auth()
+      .signOut()
+      .then(function() {
+        // Sign-out successful.
+        setUser(null);
+        window.location.href = "/";
+      })
+      .catch(function(error) {
+        // An error happened.
+      });
+  };
+
+  React.useEffect(() => {
+    firebase.auth().onAuthStateChanged(function(user) {
+      if (user) {
+        setUser(user);
+      } else {
+        setUser(null);
+      }
+    });
+  }, []);
 
   React.useEffect(() => {
     const paths = window.location.pathname.split("/");
@@ -130,6 +169,7 @@ const App = () => {
             if (data) {
               setItems(data.listItems);
               setListTitle(data.title);
+              setListOwner(data.userId);
             }
           }
         });
@@ -138,7 +178,11 @@ const App = () => {
 
   return (
     <StylesProvider injectFirst>
-      <button onClick={() => {setViewOnly(!isViewOnly); console.log(isViewOnly)}}>mockViewer</button>
+      {user ? (
+        <button onClick={signOut}>Sign Out</button>
+      ) : (
+        <button onClick={signIn}>Sign In</button>
+      )}
       <Layout>
         <EditableListTitle
           isViewOnly={isViewOnly}
@@ -162,17 +206,16 @@ const App = () => {
                 if (!items.length) {
                   const addDoc = await lists.add({
                     title: listTitle,
-                    listItems: [item]
+                    listItems: [item],
+                    userId: user ? user.uid : null
                   });
 
                   window.history.pushState(null, "", `/lists/${addDoc.id}`);
                   listId.current = addDoc.id;
                 } else {
-                  {
-                    await lists.doc(listId.current).update({
-                      listItems: [...items, item]
-                    });
-                  }
+                  await lists.doc(listId.current).update({
+                    listItems: [...items, item]
+                  });
                 }
                 addItem(item);
               }
@@ -214,7 +257,6 @@ const App = () => {
     </StylesProvider>
   );
 };
-
 
 const rootElement = document.getElementById("root");
 ReactDOM.render(<App />, rootElement);
