@@ -2,6 +2,8 @@ import React, { memo } from "react";
 
 import "styled-components/macro";
 
+import capitalize from "lodash/capitalize";
+
 import {
   Button,
   CircularProgress,
@@ -71,8 +73,6 @@ const ScrapedAmazonItems = ({
   );
 };
 
-
-
 const AddItem = memo((props: any) => {
   const [values, setValues] = React.useState<ListItem>(initialState);
   const [urlLoaded, setUrlLoaded] = React.useState(false);
@@ -91,9 +91,9 @@ const AddItem = memo((props: any) => {
       setValues({ ...values, url: "" })
     );
 
-    const onButtonClick = () => {
-      loadAmazonInfoAndClearUrlInput();
-    }
+  const onButtonClick = () => {
+    loadAmazonInfoAndClearUrlInput();
+  };
 
   const handleChange = (name: keyof ListItem) => (
     event: React.ChangeEvent<HTMLInputElement>
@@ -108,7 +108,13 @@ const AddItem = memo((props: any) => {
   };
 
   return (
-    <Paper css={props.isViewOnly ?  `margin: 16; padding: 16; display: none`  :  `margin: 16, padding: 16 `}>
+    <Paper
+      css={`
+        margin: 16px;
+        padding: 16px;
+        ${props.isViewOnly && "display: none"};
+      `}
+    >
       <Grid container alignItems="flex-end">
         <Grid xs={10} md={11} item style={{ paddingRight: 16 }}>
           {!urlLoaded ? (
@@ -119,28 +125,27 @@ const AddItem = memo((props: any) => {
                 `}
               />
             ) : (
-            <>
-              <TextField
-                placeholder="URL"
-                value={values.url}
-                onChange={handleChange("url")}
-                onKeyDown={onInputKeyPress}
-                fullWidth
-              />
-              <Button
+              <>
+                <TextField
+                  placeholder="URL"
+                  value={values.url}
+                  onChange={handleChange("url")}
+                  onKeyDown={onInputKeyPress}
+                  fullWidth
+                />
+                <Button
                   css={`
-                      position: absolute;
-                      margin-left: 15px;
-                      width: 7rem;
-                      `}
+                    position: absolute;
+                    margin-left: 15px;
+                    width: 7rem;
+                  `}
                   color="secondary"
                   variant="outlined"
                   onClick={loadAmazonInfoAndClearUrlInput}
-
                 >
                   Add Item
                 </Button>
-            </>
+              </>
             )
           ) : (
             <ScrapedAmazonItems values={values} />
@@ -164,10 +169,11 @@ const AddItem = memo((props: any) => {
               <MenuItem value="">
                 <em>None</em>
               </MenuItem>
-              <MenuItem value="lifestyle">Lifestyle</MenuItem>
-              <MenuItem value="electronics">Electronics</MenuItem>
-              <MenuItem value="travel">Travel</MenuItem>
-              <MenuItem value="fitness">Fitness</MenuItem>
+              {props.categories.map((category: any) => (
+                <MenuItem value={category.toLowerCase()}>
+                  {capitalize(category)}
+                </MenuItem>
+              ))}
             </Select>
           </FormControl>
           <TextField
@@ -193,8 +199,7 @@ const AddItem = memo((props: any) => {
             disabled={!urlLoaded}
             css={`
               width: 7rem;
-              `
-            }
+            `}
           >
             Add To List
           </Button>

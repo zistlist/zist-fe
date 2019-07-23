@@ -20,6 +20,8 @@ import ItemList from "./components/ItemList";
 const KEYCODE_ENTER = 13;
 const KEYCODE_ESC = 27;
 
+const DEFAULT_CATEGORIES = ["Lifestyle", "Electronics", "Travel", "Fitness"];
+
 const ListTitle: any = styled(Typography)`
   margin: 16px;
   cursor: pointer;
@@ -104,6 +106,8 @@ const App = () => {
   const [user, setUser] = React.useState();
 
   const [listOwner, setListOwner] = React.useState();
+
+  const [categories, setCategories] = React.useState([]);
 
   const isViewOnly = !user || user.uid !== listOwner;
 
@@ -221,6 +225,7 @@ const App = () => {
               }
             }
           }}
+          categories={categories}
         />
         <ItemList
           isViewOnly={isViewOnly}
@@ -246,6 +251,7 @@ const App = () => {
 
             checkItem(idx);
           }}
+          categories={categories || DEFAULT_CATEGORIES}
           onItemRemove={async (idx: number, items: Array<ListItem>) => {
             await lists.doc(listId.current).update({
               listItems: items.filter((_, filterIndex) => idx !== filterIndex)

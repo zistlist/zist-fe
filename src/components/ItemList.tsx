@@ -1,13 +1,24 @@
 import React, { memo } from "react";
 import { List as ListMUI, Paper } from "@material-ui/core";
 
+import "styled-components/macro";
+
 import ListItem from "./ListItem";
 
 const List = memo((props: any) => (
   <>
     {props.items.length > 0 && (
-      <Paper css={` margin: 16 `}>
-        <ListMUI css={` overflow: scroll `}>
+      <Paper
+        css={`
+          margin: 16px;
+          padding: 16px;
+        `}
+      >
+        <ListMUI
+          css={`
+            overflow: scroll;
+          `}
+        >
           {props.items.map((item: any, idx: number) => (
             <ListItem
               isViewOnly={props.isViewOnly}
