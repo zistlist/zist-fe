@@ -109,7 +109,11 @@ const App = () => {
 
   const [categories, setCategories] = React.useState([]);
 
-  const isViewOnly = !user || user.uid !== listOwner;
+  let isViewOnly = !!listOwner;
+
+  if (isViewOnly && user && user.uid === listOwner) {
+    isViewOnly = false;
+  }
 
   const signIn = () => {
     firebase
