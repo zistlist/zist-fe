@@ -140,6 +140,7 @@ const AddItem = memo((props: any) => {
                     width: 7rem;
                   `}
                   color="secondary"
+                  disabled={!values.url}
                   variant="outlined"
                   onClick={loadAmazonInfoAndClearUrlInput}
                 >

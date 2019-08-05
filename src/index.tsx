@@ -210,7 +210,7 @@ const App = () => {
           isViewOnly={isViewOnly}
           addItem={async (item: any) => {
             if (!items.find(el => el.id === item.id)) {
-              if (item.category !== "" && item.quantity !== null) {
+              if (item.quantity !== null) {
                 if (!items.length) {
                   const addDoc = await lists.add({
                     title: listTitle,

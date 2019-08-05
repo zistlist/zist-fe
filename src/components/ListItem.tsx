@@ -55,7 +55,7 @@ const ListItem = (props: any) => {
                 color: black;
               `}
             >
-              Category: {capitalize(props.category)}
+              {props.category && `Category: ${capitalize(props.category)}`}
             </Typography>
             <Typography
               css={`
