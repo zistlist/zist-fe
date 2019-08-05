@@ -107,7 +107,7 @@ const App = () => {
 
   const [listOwner, setListOwner] = React.useState();
 
-  const [categories, setCategories] = React.useState([]);
+  const [categories, setCategories] = React.useState(DEFAULT_CATEGORIES);
 
   let isViewOnly = !!listOwner;
 
@@ -215,7 +215,8 @@ const App = () => {
                   const addDoc = await lists.add({
                     title: listTitle,
                     listItems: [item],
-                    userId: user ? user.uid : null
+                    userId: user ? user.uid : null,
+                    categories: DEFAULT_CATEGORIES
                   });
 
                   window.history.pushState(null, "", `/lists/${addDoc.id}`);
