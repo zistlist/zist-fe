@@ -108,10 +108,18 @@ const App = () => {
 
   const [listOwner, setListOwner] = React.useState();
 
-  const [categories, setCategories] = React.useState([]);
+  const [categories, setCategories] = React.useState(DEFAULT_CATEGORIES);
 
+<<<<<<< HEAD
   const isViewOnly = !user || user.uid !== listOwner;
   console.log(isViewOnly);
+=======
+  let isViewOnly = !!listOwner;
+
+  if (isViewOnly && user && user.uid === listOwner) {
+    isViewOnly = false;
+  }
+>>>>>>> 3ccb7ff4ad3e29078af3ec6e3667a03f8c770848
 
   const signIn = () => {
     firebase
@@ -209,12 +217,13 @@ const App = () => {
         isViewOnly={isViewOnly}
           addItem={async (item: any) => {
             if (!items.find(el => el.id === item.id)) {
-              if (item.category !== "" && item.quantity !== null) {
+              if (item.quantity !== null) {
                 if (!items.length) {
                   const addDoc = await lists.add({
                     title: listTitle,
                     listItems: [item],
-                    userId: user ? user.uid : null
+                    userId: user ? user.uid : null,
+                    categories: DEFAULT_CATEGORIES
                   });
 
                   window.history.pushState(null, "", `/lists/${addDoc.id}`);

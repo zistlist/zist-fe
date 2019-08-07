@@ -21,7 +21,7 @@ const ListItem = (props: any) => {
   return (
     <ListItemMUI divider={props.divider}>
       <Checkbox
-        style={props.isViewOnly ? {display: 'none'} : {display: 'initial'}}
+        style={props.isViewOnly ? { display: "none" } : { display: "initial" }}
         onClick={props.onCheckBoxToggle}
         checked={props.checked}
         disableRipple
@@ -55,7 +55,7 @@ const ListItem = (props: any) => {
                 color: black;
               `}
             >
-              Category: {capitalize(props.category)}
+              {props.category && `Category: ${capitalize(props.category)}`}
             </Typography>
             <Typography
               css={`
@@ -75,8 +75,10 @@ const ListItem = (props: any) => {
           </>
         }
       />
-      <ListItemSecondaryAction style={props.isViewOnly ? {display:'none'} : {display: 'initial'}}>
-        <IconButton  aria-label="Delete Item" onClick={props.onButtonClick}>
+      <ListItemSecondaryAction
+        style={props.isViewOnly ? { display: "none" } : { display: "initial" }}
+      >
+        <IconButton aria-label="Delete Item" onClick={props.onButtonClick}>
           <DeleteOutlined />
         </IconButton>
       </ListItemSecondaryAction>
