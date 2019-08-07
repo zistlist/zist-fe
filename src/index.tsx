@@ -16,6 +16,7 @@ import Layout from "./components/Layout";
 
 import AddItem from "./components/AddItem";
 import ItemList from "./components/ItemList";
+import DueDate from "./components/DueDate";
 
 const KEYCODE_ENTER = 13;
 const KEYCODE_ESC = 27;
@@ -110,6 +111,7 @@ const App = () => {
   const [categories, setCategories] = React.useState([]);
 
   const isViewOnly = !user || user.uid !== listOwner;
+  console.log(isViewOnly);
 
   const signIn = () => {
     firebase
@@ -187,6 +189,7 @@ const App = () => {
       ) : (
         <button onClick={signIn}>Sign In</button>
       )}
+      <DueDate />
       <Layout>
         <EditableListTitle
           isViewOnly={isViewOnly}
@@ -203,7 +206,7 @@ const App = () => {
           }}
         />
         <AddItem
-          isViewOnly={isViewOnly}
+        isViewOnly={isViewOnly}
           addItem={async (item: any) => {
             if (!items.find(el => el.id === item.id)) {
               if (item.category !== "" && item.quantity !== null) {

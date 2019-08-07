@@ -5,6 +5,8 @@ import "styled-components/macro";
 
 import ListItem from "./ListItem";
 
+import DueDate from "./DueDate";
+
 const List = memo((props: any) => (
   <>
     {props.items.length > 0 && (
@@ -30,6 +32,7 @@ const List = memo((props: any) => (
             />
           ))}
         </ListMUI>
+        <DueDate></DueDate>
       </Paper>
     )}
   </>
