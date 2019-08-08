@@ -17,6 +17,8 @@ import {
   Typography
 } from "@material-ui/core";
 
+import Creatable from "react-select/creatable";
+
 const KEYCODE_ENTER = 13;
 const KEYCODE_ESC = 27;
 
@@ -152,31 +154,27 @@ const AddItem = memo((props: any) => {
             <ScrapedAmazonItems values={values} />
           )}
 
-          <FormControl>
-            <InputLabel htmlFor="category">Category</InputLabel>
-            <Select
-              css={`
-                width: 8rem;
-              `}
-              value={values.category}
-              onChange={(e: React.ChangeEvent<{ value: unknown }>) => {
-                setValues({ ...values, category: e.target.value as string });
-              }}
-              inputProps={{
-                name: "category",
-                id: "category"
-              }}
-            >
-              <MenuItem value="">
-                <em>None</em>
-              </MenuItem>
-              {props.categories.map((category: any) => (
-                <MenuItem value={category.toLowerCase()}>
-                  {capitalize(category)}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
+          <InputLabel htmlFor="category">Category</InputLabel>
+          <Creatable
+            isClearable
+            css={`
+              width: 8rem;
+              font-family: Arial;
+            `}
+            name="category"
+            label="Category"
+            options={props.categories.map((category: string) => ({
+              value: category.toLowerCase(),
+              label: capitalize(category)
+            }))}
+            onChange={(newValue: any) => {
+              setValues({ ...values, category: newValue.value });
+            }}
+            inputProps={{
+              name: "category",
+              id: "category"
+            }}
+          />
           <TextField
             placeholder="Comment"
             value={values.comment}
