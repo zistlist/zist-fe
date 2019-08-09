@@ -4,6 +4,11 @@ import "styled-components/macro";
 
 import capitalize from "lodash/capitalize";
 
+import { SingleDatePicker } from 'react-dates';
+import 'react-dates/initialize';
+import 'react-dates/lib/css/_datepicker.css';
+
+
 import {
   Button,
   CircularProgress,
@@ -206,6 +211,19 @@ const AddItem = memo((props: any) => {
           </Button>
         </Grid>
       </Grid>
+      <div>
+      Purchase By: <>
+        <SingleDatePicker
+      placeholder={"mm/dd/yyyy"}
+      date={props.date}
+      onDateChange={date => props.setDate(date)}
+      focused={props.focused}
+      onFocusChange={({ focused }) => props.setFocused(!focused)}
+      id="your_unique_id"
+      keepOpenOnDateSelect={false}
+    />
+        </>
+      </div>
     </Paper>
   );
 });

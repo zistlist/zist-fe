@@ -11,7 +11,6 @@ import capitalize from "lodash/capitalize";
 
 import ListItem from "./ListItem";
 
-import DueDate from "./DueDate";
 
 const List = memo((props: any) => (
   <>
@@ -73,7 +72,6 @@ const List = memo((props: any) => (
               </>
             ))}
         </ListMUI>
-        <DueDate></DueDate>
       </Paper>
     )}
   </>

@@ -82,6 +82,7 @@ const ListItem = (props: any) => {
           <DeleteOutlined />
         </IconButton>
       </ListItemSecondaryAction>
+      <div>Due Date Placeholder: 01/01/01</div>
     </ListItemMUI>
   );
 };

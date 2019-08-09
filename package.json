@@ -20,6 +20,7 @@
     "@types/styled-components": "^4.1.15",
     "firebase": "^6.2.2",
     "lodash": "^4.17.15",
+    "moment": "^2.24.0",
     "react": "^16.8.6",
     "react-async": "^6.2.2",
     "react-dates": "^20.2.5",

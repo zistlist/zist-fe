@@ -7,6 +7,8 @@ import ReactDOM from "react-dom";
 
 import styled from "styled-components";
 
+import moment from 'moment';
+
 import { TextField, Typography } from "@material-ui/core";
 import { StylesProvider } from "@material-ui/styles";
 
@@ -14,9 +16,14 @@ import { useItems } from "./custom-hooks";
 
 import Layout from "./components/Layout";
 
+
 import AddItem from "./components/AddItem";
 import ItemList from "./components/ItemList";
-import DueDate from "./components/DueDate";
+
+
+import 'react-dates/initialize';
+import { SingleDatePicker } from 'react-dates';
+import 'react-dates/lib/css/_datepicker.css';
 
 const KEYCODE_ENTER = 13;
 const KEYCODE_ESC = 27;
@@ -51,6 +58,13 @@ const keyInput = (
 
   return false;
 };
+
+//datepicker state
+const datePicker = (time:any) => {
+   const date = time || moment();
+   return date;
+}
+
 
 const EditableListTitle = ({ listTitle, setListTitle, isViewOnly }: any) => {
   const [viewState, setViewState] = React.useState<"viewing" | "editing">(
@@ -104,22 +118,20 @@ const App = () => {
 
   const listId = React.useRef("");
 
+  const [date, setDate] = React.useState<any| null>(moment());
+  const [focused, setFocused] = React.useState<boolean>(false);
+
   const [user, setUser] = React.useState();
 
   const [listOwner, setListOwner] = React.useState();
 
   const [categories, setCategories] = React.useState(DEFAULT_CATEGORIES);
 
-<<<<<<< HEAD
-  const isViewOnly = !user || user.uid !== listOwner;
-  console.log(isViewOnly);
-=======
   let isViewOnly = !!listOwner;
 
   if (isViewOnly && user && user.uid === listOwner) {
     isViewOnly = false;
   }
->>>>>>> 3ccb7ff4ad3e29078af3ec6e3667a03f8c770848
 
   const signIn = () => {
     firebase
@@ -197,7 +209,6 @@ const App = () => {
       ) : (
         <button onClick={signIn}>Sign In</button>
       )}
-      <DueDate />
       <Layout>
         <EditableListTitle
           isViewOnly={isViewOnly}
@@ -214,6 +225,10 @@ const App = () => {
           }}
         />
         <AddItem
+        date={date}
+        setDate={setDate}
+        focused={focused}
+        setFocused={setFocused}
         isViewOnly={isViewOnly}
           addItem={async (item: any) => {
             if (!items.find(el => el.id === item.id)) {
