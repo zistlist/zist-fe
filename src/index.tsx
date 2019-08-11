@@ -7,6 +7,8 @@ import ReactDOM from "react-dom";
 
 import styled from "styled-components";
 
+import moment from 'moment';
+
 import { TextField, Typography } from "@material-ui/core";
 import { StylesProvider } from "@material-ui/styles";
 
@@ -14,8 +16,14 @@ import { useItems } from "./custom-hooks";
 
 import Layout from "./components/Layout";
 
+
 import AddItem from "./components/AddItem";
 import ItemList from "./components/ItemList";
+
+
+import 'react-dates/initialize';
+import { SingleDatePicker } from 'react-dates';
+import 'react-dates/lib/css/_datepicker.css';
 
 const KEYCODE_ENTER = 13;
 const KEYCODE_ESC = 27;
@@ -50,6 +58,13 @@ const keyInput = (
 
   return false;
 };
+
+//datepicker state
+const datePicker = (time:any) => {
+   const date = time || moment();
+   return date;
+}
+
 
 const EditableListTitle = ({ listTitle, setListTitle, isViewOnly }: any) => {
   const [viewState, setViewState] = React.useState<"viewing" | "editing">(
@@ -102,6 +117,9 @@ const App = () => {
   const [listTitle, setListTitle] = React.useState("title");
 
   const listId = React.useRef("");
+
+  const [date, setDate] = React.useState<any| null>(moment());
+  const [focused, setFocused] = React.useState<boolean>(false);
 
   const [user, setUser] = React.useState();
 
@@ -208,7 +226,11 @@ const App = () => {
           }}
         />
         <AddItem
-          isViewOnly={isViewOnly}
+        date={date}
+        setDate={setDate}
+        focused={focused}
+        setFocused={setFocused}
+        isViewOnly={isViewOnly}
           addItem={async (item: any) => {
             if (!items.find(el => el.id === item.id)) {
               if (item.quantity !== null) {
