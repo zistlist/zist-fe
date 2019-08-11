@@ -28,7 +28,7 @@ import 'react-dates/lib/css/_datepicker.css';
 const KEYCODE_ENTER = 13;
 const KEYCODE_ESC = 27;
 
-const DEFAULT_CATEGORIES = ["Lifestyle", "Electronics", "Travel", "Fitness"];
+const DEFAULT_CATEGORIES = ["lifestyle", "electronics", "travel", "fitness"];
 
 const ListTitle: any = styled(Typography)`
   margin: 16px;
@@ -193,6 +193,7 @@ const App = () => {
             listId.current = paths[2];
             const data = doc.data();
             if (data) {
+              setCategories(data.categories);
               setItems(data.listItems);
               setListTitle(data.title);
               setListOwner(data.userId);
@@ -234,19 +235,31 @@ const App = () => {
             if (!items.find(el => el.id === item.id)) {
               if (item.quantity !== null) {
                 if (!items.length) {
+                  console.log("item.category", item.category);
                   const addDoc = await lists.add({
                     title: listTitle,
                     listItems: [item],
                     userId: user ? user.uid : null,
-                    categories: DEFAULT_CATEGORIES
+                    categories: DEFAULT_CATEGORIES.includes(
+                      item.category.toLowerCase()
+                    )
+                      ? DEFAULT_CATEGORIES
+                      : [...DEFAULT_CATEGORIES, item.category]
                   });
 
                   window.history.pushState(null, "", `/lists/${addDoc.id}`);
                   listId.current = addDoc.id;
                 } else {
-                  await lists.doc(listId.current).update({
-                    listItems: [...items, item]
-                  });
+                  const newList = {
+                    listItems: [...items, item],
+                    categories
+                  };
+
+                  if (!categories.includes(item.category)) {
+                    newList.categories.push(item.category.toLowerCase());
+                  }
+
+                  await lists.doc(listId.current).update(newList);
                 }
                 addItem(item);
               }
