@@ -28,7 +28,7 @@
     "react-select": "^3.0.4",
     "styled-components": "^4.3.2",
     "typescript": "^3.5.1",
-    "yarn": "^1.17.3"
+    "yarn": "^1.22.0"
   },
   "devDependencies": {},
   "scripts": {
